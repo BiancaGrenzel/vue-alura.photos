@@ -4,7 +4,7 @@
 
     <input type="search" class="filtro" v-on:input="filtro = $event.target.value" placeholder="filtre por parte do título">
     <ul class="lista-fotos">
-      <li class="lista-fotos-item" v-for="foto of fotos" v-bind:key="foto.id">
+      <li class="lista-fotos-item" v-for="foto of fotosComFiltro" v-bind:key="foto.id">
         <meu-painel :titulo="foto.titulo">
           <img
             class="img-responsiva"
@@ -32,6 +32,20 @@ export default {
       fotos: [],
       filtro: ''
     };
+  },
+
+  computed:{
+
+    fotosComFiltro(){
+
+      if(this.filtro){
+        // filtrar
+        let exp = new RegExp(this.filtro.trim(), 'i');
+        return this.fotos.filter(foto => exp.test(foto.titulo));
+      }else{
+        return this.fotos;
+      }
+    }
   },
 
   created() {
