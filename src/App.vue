@@ -1,74 +1,20 @@
 <template>
   <div id="app" class="corpo">
-    <h1 class="centralizado">{{ titulo }}</h1>
-
-    <input type="search" class="filtro" v-on:input="filtro = $event.target.value" placeholder="filtre por parte do título">
-    <ul class="lista-fotos">
-      <li class="lista-fotos-item" v-for="foto of fotosComFiltro" v-bind:key="foto.id">
-        <meu-painel :titulo="foto.titulo">
-          <img
-            class="img-responsiva"
-            v-bind:src="foto.url"
-            :alt="foto.titulo"
-          />
-        </meu-painel>
-      </li>
-    </ul>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import Painel from './components/shared/painel/Painel'
+import ImagemResponsiva from './components/shared/imagem-responsiva/imagemResponsiva.vue'
 
 export default {
 
-  components:{
-    'meu-painel' : Painel
-  },
-
-  data() {
-    return {
-      titulo: "Projeto Inicial",
-      fotos: [],
-      filtro: ''
-    };
-  },
-
-  computed:{
-
-    fotosComFiltro(){
-
-      if(this.filtro){
-        // filtrar
-        let exp = new RegExp(this.filtro.trim(), 'i');
-        return this.fotos.filter(foto => exp.test(foto.titulo));
-      }else{
-        return this.fotos;
-      }
-    }
-  },
-
-  created() {
-    //fetch pode ser usado
-    this.$http
-      .get("http://localhost:3000/v1/fotos")
-      .then(res => res.json())
-      .then(
-        fotos => (this.fotos = fotos),
-        err => console.log(err)
-      );
-
-    // promise.then(res => {
-    //   res.json().then(fotos => this.fotos = fotos);
-    // });
-  }
+  
 };
 </script>
 
 <style>
-.centralizado {
-  text-align: center;
-}
 
 .corpo {
   font-family: Helvetica, sans-serif;
@@ -76,21 +22,4 @@ export default {
   width: 96%;
 }
 
-.lista-fotos {
-  list-style: none;
-}
-
-.lista-fotos .lista-fotos-item {
-  display: inline-block;
-}
-
-.img-responsiva {
-  width: 100%;
-  height: 150px;
-}
-
-.filtro {
-    display: block;
-    width: 100%;
-  }
 </style>
