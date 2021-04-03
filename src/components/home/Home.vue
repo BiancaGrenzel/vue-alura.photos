@@ -2,11 +2,31 @@
   <div id="app" class="corpo">
     <h1 class="centralizado">{{ titulo }}</h1>
 
-    <input type="search" class="filtro" v-on:input="filtro = $event.target.value" placeholder="filtre por parte do título">
+    <input
+      type="search"
+      class="filtro"
+      v-on:input="filtro = $event.target.value"
+      placeholder="filtre por parte do título"
+    />
     <ul class="lista-fotos">
-      <li class="lista-fotos-item" v-for="foto of fotosComFiltro" v-bind:key="foto.id">
+      <li
+        class="lista-fotos-item"
+        v-for="foto of fotosComFiltro"
+        v-bind:key="foto.id"
+      >
         <meu-painel :titulo="foto.titulo">
-          <imagem-responsiva :url="foto.url" :titulo="foto.titulo"></imagem-responsiva>
+          <imagem-responsiva
+            :url="foto.url"
+            :titulo="foto.titulo"
+          ></imagem-responsiva>
+          <meu-botao
+            tipo="button"
+            rotulo="REMOVER"
+            @botaoAtivado="remove(foto)"
+            :confirmacao="true"
+            estilo="perigo"
+          ></meu-botao>
+          <!-- @click.native="remove(foto)" -->
         </meu-painel>
       </li>
     </ul>
@@ -14,35 +34,40 @@
 </template>
 
 <script>
-import Painel from '../shared/painel/Painel'
-import ImagemResponsiva from '../shared/imagem-responsiva/imagemResponsiva.vue'
+import Painel from "../shared/painel/Painel";
+import ImagemResponsiva from "../shared/imagem-responsiva/imagemResponsiva.vue";
+import Botao from "../shared/botao/Botao";
 
 export default {
-
-  components:{
-    'meu-painel' : Painel,
-    'imagem-responsiva': ImagemResponsiva
+  components: {
+    "meu-painel": Painel,
+    "imagem-responsiva": ImagemResponsiva,
+    "meu-botao": Botao
   },
 
   data() {
     return {
       titulo: "Projeto Inicial",
       fotos: [],
-      filtro: ''
+      filtro: ""
     };
   },
 
-  computed:{
-
-    fotosComFiltro(){
-
-      if(this.filtro){
+  computed: {
+    fotosComFiltro() {
+      if (this.filtro) {
         // filtrar
-        let exp = new RegExp(this.filtro.trim(), 'i');
+        let exp = new RegExp(this.filtro.trim(), "i");
         return this.fotos.filter(foto => exp.test(foto.titulo));
-      }else{
+      } else {
         return this.fotos;
       }
+    }
+  },
+
+  methods: {
+    remove(foto) {
+        alert("Remover a foto " + foto.titulo);
     }
   },
 
@@ -77,7 +102,7 @@ export default {
 }
 
 .filtro {
-    display: block;
-    width: 100%;
-  }
+  display: block;
+  width: 100%;
+}
 </style>
